@@ -3,11 +3,10 @@ package com.bin.david.router;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 
-import com.bin.david.rounter.bean.RouterInfo;
-import com.bin.david.rounter.exception.RounterException;
-import com.bin.david.rounter.xml.RouterReadCallback;
-import com.bin.david.rounter.xml.RouterReader;
+import com.bin.david.router.bean.RouterInfo;
+import com.bin.david.router.exception.RounterException;
 
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class SmartRouter {
 
     private Context mContext;
     private static SmartRouter mInstance;
-    private RouterReader reader;
+    private RouteLoader mRouterLoader;
 
     public static void init(Context context){
         if(context ==null){
@@ -40,28 +39,8 @@ public class SmartRouter {
 
     private SmartRouter(Context context){
         this.mContext = context;
-        reader = new RouterReader();
-        reader.read("router", new RouterReadCallback() {
-            @Override
-            public void readSuc(Map<String, RouterInfo> routerMap) {
-
-            }
-
-            @Override
-            public void readFail(String failMsg) {
-
-            }
-
-            @Override
-            public void readStart() {
-
-            }
-
-            @Override
-            public void readEnd() {
-
-            }
-        });
+        mRouterLoader = new RouteLoader();
+        mRouterLoader.loadRootRouter();
     }
 
     public static SmartRouter getInstance(){
@@ -71,5 +50,26 @@ public class SmartRouter {
         return mInstance;
     }
 
+    public Builder build(String url){
+        return new Builder(url);
+    }
+
+    private void start(Builder builder){
+        Class clazz = mRouterLoader.getRouter(builder.url);
+        Intent intent = new Intent(mContext,clazz);
+        mContext.startActivity(intent);
+    }
+
+    public static class Builder{
+        private String url;
+
+        public Builder(String url) {
+            this.url = url;
+        }
+
+        public void navigation(){
+            SmartRouter.getInstance().start(this);
+        }
+    }
 
 }

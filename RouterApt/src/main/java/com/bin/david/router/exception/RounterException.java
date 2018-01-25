@@ -1,4 +1,4 @@
-package com.bin.david.rounter.exception;
+package com.bin.david.router.exception;
 
 /**
  * Created by huang on 2017/11/17.

@@ -1,18 +1,28 @@
-package com.bin.david.rounter.parse;
+package com.bin.david.router.parse;
 
-import com.bin.david.rounter.annotation.Param;
-import com.bin.david.rounter.annotation.Router;
-import com.bin.david.rounter.bean.RouterInfo;
-import com.bin.david.rounter.bean.RouterParam;
+import com.bin.david.router.annotation.Param;
+import com.bin.david.router.annotation.Router;
+import com.bin.david.router.bean.RouterInfo;
+import com.bin.david.router.bean.RouterParam;
+import com.bin.david.router.config.RouterConfig;
+import com.google.common.reflect.TypeToken;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
@@ -85,5 +95,31 @@ public class RouterParser {
         return routerParamMap;
     }
 
+
+    public void generateCode( Map<String,RouterInfo> routerInfoMap,Filer filer){
+
+        TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(RouterConfig.RouterRootLoadImp)
+                .addSuperinterface(IRouterLoad.class)
+                .addModifiers(Modifier.PUBLIC);
+        MethodSpec.Builder methodBuilder = MethodSpec
+                .methodBuilder("onLoad")
+                .addModifiers(Modifier.PUBLIC)
+                .returns(Map.class);
+        methodBuilder.addStatement("$T<$T,$T> routerMap = new $T<$T,$T>()", LinkedHashMap.class,String.class,RouterInfo.class,
+                LinkedHashMap.class,String.class,RouterInfo.class);
+        for(Map.Entry<String,RouterInfo>  entry : routerInfoMap.entrySet()){
+            RouterInfo routerInfo = entry.getValue();
+            methodBuilder.addStatement("routerMap.put($S,new RouterInfo($N.class,$S,$S))",routerInfo.getPath(),routerInfo.getName(),routerInfo.getName(),routerInfo.getPath());
+        }
+        methodBuilder.addStatement("return routerMap");
+        typeBuilder.addMethod(methodBuilder.build());
+        JavaFile javaFile = JavaFile.builder(RouterConfig.RouterPackage, typeBuilder.build()).build();
+        try {
+            javaFile.writeTo(filer);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

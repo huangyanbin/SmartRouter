@@ -1,4 +1,4 @@
-package com.bin.david.rounter.bean;
+package com.bin.david.router.bean;
 
 import java.util.List;
 
@@ -10,12 +10,19 @@ public class RouterInfo {
 
     private String name;
     private String path;
+    private Class clazz;
     private List<RouterParam> routerParams;
 
     public RouterInfo( String name, String path) {
 
         this.name = name;
         this.path = path;
+    }
+
+    public RouterInfo(Class clazz,String name, String path) {
+        this.name = name;
+        this.path = path;
+        this.clazz = clazz;
     }
 
     public String getName() {
@@ -40,5 +47,13 @@ public class RouterInfo {
 
     public void setRouterParams(List<RouterParam> routerParams) {
         this.routerParams = routerParams;
+    }
+
+    public Class getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class clazz) {
+        this.clazz = clazz;
     }
 }

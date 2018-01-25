@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.bin.david.router.SmartRouter;
 import com.bin.david.smartRouter.adapter.ItemAdapter;
 import com.bin.david.smartRouter.bean.MainItem;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -33,9 +34,10 @@ public class MainActivity extends AppCompatActivity {
         itemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-               MainItem mainItem = (MainItem) adapter.getData().get(position);
-                Intent i = new Intent(MainActivity.this,mainItem.clazz);
-                startActivity(i);
+              // MainItem mainItem = (MainItem) adapter.getData().get(position);
+                //Intent i = new Intent(MainActivity.this,mainItem.clazz);
+                //startActivity(i);
+                SmartRouter.getInstance().build("/user/comm").navigation();
             }
         });
     }

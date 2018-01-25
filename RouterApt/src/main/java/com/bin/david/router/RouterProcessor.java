@@ -1,11 +1,10 @@
-package com.bin.david.rounter;
+package com.bin.david.router;
 
 
-import com.bin.david.rounter.annotation.Param;
-import com.bin.david.rounter.annotation.Router;
-import com.bin.david.rounter.bean.RouterInfo;
-import com.bin.david.rounter.xml.RouterWriter;
-import com.bin.david.rounter.parse.RouterParser;
+import com.bin.david.router.annotation.Param;
+import com.bin.david.router.annotation.Router;
+import com.bin.david.router.bean.RouterInfo;
+import com.bin.david.router.parse.RouterParser;
 import com.google.auto.service.AutoService;
 
 import java.util.HashSet;
@@ -51,7 +50,7 @@ public class RouterProcessor extends AbstractProcessor {
         RouterParser routerParser = new RouterParser();
         Map<String,RouterInfo> routerMap =  routerParser.parse(routerSet,paramsSet);
         if(routerMap !=null &&routerMap.size()>0){
-            new RouterWriter().write(routerMap);
+            routerParser.generateCode(routerMap,filer);
         }
         return true;
 

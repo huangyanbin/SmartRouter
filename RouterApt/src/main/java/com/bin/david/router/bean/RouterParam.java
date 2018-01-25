@@ -1,4 +1,4 @@
-package com.bin.david.rounter.bean;
+package com.bin.david.router.bean;
 
 /**
  * Created by huang on 2018/1/25.

@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.bin.david.rounter.annotation.Param;
-import com.bin.david.rounter.annotation.Router;
+import com.bin.david.router.annotation.Param;
+import com.bin.david.router.annotation.Router;
 
 /**
  * Created by huang on 2018/1/25.
