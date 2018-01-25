@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><routerStore>
 <router name="com.bin.david.smartRouter.CommonActivity">
-<path>/user/comm</path>
-</router>
+    <path>/user/comm</path>
+    </router>
 </routerStore>
