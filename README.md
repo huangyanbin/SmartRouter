@@ -39,7 +39,7 @@
 
 ###### 第二天
 
-> 通过javapoet生成用于初始化路由代码，下面是javapoet生成路由代码：
+> 通过```javapoet```生成用于初始化路由代码，下面是```javapoet```生成路由代码：
 
 ```
     private MethodSpec generateRouteCode(Map<String,RouterInfo> routerInfoMap){
@@ -59,7 +59,7 @@
 
     }
 ```
-> 然后用建造模式用于构建Intent信息；
+> 然后用建造模式用于构建```Intent```信息；
 
 ```
   public static class Builder{
@@ -81,7 +81,7 @@
         }
         ...
 ```
-> 使用静态代理代理Instrumentation对象，并在newActivity方法调用 SmartRouter.getInstance().inject(activity,intent);帮助activity 自动注入传参。
+> 使用静态代理代理```Instrumentation```对象，并在```newActivity```方法调用 ```SmartRouter.getInstance().inject(activity,intent);```帮助```activity``` 自动注入传参。
 
 ```
  /**
