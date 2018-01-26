@@ -15,6 +15,7 @@ public class RouterApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         SmartRouter.init(base);
+        SmartRouter.getInstance().routerAutoInject(this);
 
     }
 }

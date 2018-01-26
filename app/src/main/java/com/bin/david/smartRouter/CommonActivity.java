@@ -21,7 +21,7 @@ public class CommonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SmartRouter.getInstance().inject(this);
+       // SmartRouter.getInstance().inject(this);
         Log.e("huang",name);
     }
 }

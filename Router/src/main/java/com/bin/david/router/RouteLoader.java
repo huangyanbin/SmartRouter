@@ -30,6 +30,9 @@ public class RouteLoader {
     }
 
     public void getParams(Context context,Intent intent){
+        if(intent == null){
+            return;
+        }
         String className = context.getClass().getName();
         RouterParam[] params = routerParamMap.get(className);
         if(params !=null){
