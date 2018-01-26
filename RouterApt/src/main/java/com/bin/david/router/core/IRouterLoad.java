@@ -1,4 +1,4 @@
-package com.bin.david.router.parse;
+package com.bin.david.router.core;
 
 import java.util.Map;
 
@@ -8,5 +8,6 @@ import java.util.Map;
 
 public interface IRouterLoad {
 
-     Map onLoad();
+     Map onLoadRoute();
+     Map onLoadParam();
 }

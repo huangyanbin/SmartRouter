@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 
-import com.bin.david.router.bean.RouterInfo;
-import com.bin.david.router.exception.RounterException;
+import com.bin.david.router.exception.RouterException;
 
-import java.util.Map;
+
 
 /**
  * Created by huang on 2018/1/25.
@@ -22,7 +22,7 @@ public class SmartRouter {
 
     public static void init(Context context){
         if(context ==null){
-            throw new RounterException("SmartRouter init param context is null");
+            throw new RouterException("SmartRouter init param context is null");
         }
         if(mInstance == null){
             synchronized (SmartRouter.class) {
@@ -45,7 +45,7 @@ public class SmartRouter {
 
     public static SmartRouter getInstance(){
         if(mInstance ==null){
-            throw new RounterException("SmartRouter is not init");
+            throw new RouterException("SmartRouter is not init");
         }
         return mInstance;
     }
@@ -56,20 +56,57 @@ public class SmartRouter {
 
     private void start(Builder builder){
         Class clazz = mRouterLoader.getRouter(builder.url);
-        Intent intent = new Intent(mContext,clazz);
-        mContext.startActivity(intent);
+        builder.intent.setClass(mContext,clazz);
+        mContext.startActivity(builder.intent);
+    }
+
+    public void inject(Activity activity){
+        mRouterLoader.getParams(activity,activity.getIntent());
     }
 
     public static class Builder{
         private String url;
+        private Intent intent;
 
-        public Builder(String url) {
+        private Builder(String url) {
             this.url = url;
+            intent = new Intent();
         }
 
         public void navigation(){
             SmartRouter.getInstance().start(this);
         }
+
+        public Builder withString(String key,String value){
+            intent.putExtra(key,value);
+            return this;
+        }
+
+        public Builder withInt(String key,int value){
+            intent.putExtra(key,value);
+            return this;
+        }
+        public Builder withLong(String key,long value){
+            intent.putExtra(key,value);
+            return this;
+        }
+
+        public Builder withShort(String key,short value){
+            intent.putExtra(key,value);
+            return this;
+        }
+
+        public Builder widthParcelable(String key,Parcelable value){
+            intent.putExtra(key,value);
+            return this;
+        }
+
+        public Intent getExtra(){
+            return intent;
+        }
+
+
+
     }
 
 }

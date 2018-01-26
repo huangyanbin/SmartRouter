@@ -4,9 +4,9 @@ package com.bin.david.router.exception;
  * Created by huang on 2017/11/17.
  */
 
-public class RounterException extends RuntimeException {
+public class RouterException extends RuntimeException {
 
-    public RounterException(String s) {
+    public RouterException(String s) {
         super(s);
     }
 }

@@ -4,7 +4,8 @@ package com.bin.david.router;
 import com.bin.david.router.annotation.Param;
 import com.bin.david.router.annotation.Router;
 import com.bin.david.router.bean.RouterInfo;
-import com.bin.david.router.parse.RouterParser;
+import com.bin.david.router.core.RouterGenerater;
+import com.bin.david.router.core.RouterParser;
 import com.google.auto.service.AutoService;
 
 import java.util.HashSet;
@@ -50,7 +51,7 @@ public class RouterProcessor extends AbstractProcessor {
         RouterParser routerParser = new RouterParser();
         Map<String,RouterInfo> routerMap =  routerParser.parse(routerSet,paramsSet);
         if(routerMap !=null &&routerMap.size()>0){
-            routerParser.generateCode(routerMap,filer);
+            new RouterGenerater().generateCode(routerMap,filer);
         }
         return true;
 

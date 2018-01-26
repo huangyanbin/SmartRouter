@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
               // MainItem mainItem = (MainItem) adapter.getData().get(position);
                 //Intent i = new Intent(MainActivity.this,mainItem.clazz);
                 //startActivity(i);
-                SmartRouter.getInstance().build("/user/comm").navigation();
+                SmartRouter.getInstance().build("/user/comm").withString("name","huang").navigation();
             }
         });
     }

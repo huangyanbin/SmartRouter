@@ -3,7 +3,9 @@ package com.bin.david.smartRouter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.bin.david.router.SmartRouter;
 import com.bin.david.router.annotation.Param;
 import com.bin.david.router.annotation.Router;
 
@@ -15,9 +17,11 @@ import com.bin.david.router.annotation.Router;
 public class CommonActivity extends AppCompatActivity {
 
     @Param
-    private String param1;
+    private String name;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SmartRouter.getInstance().inject(this);
+        Log.e("huang",name);
     }
 }
