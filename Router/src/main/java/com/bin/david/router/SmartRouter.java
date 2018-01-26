@@ -79,16 +79,8 @@ public class SmartRouter {
             Instrumentation instrumentation = (Instrumentation) field.get(currentActivityThread);
             InstrumentationProxy instrumentationProxy = new InstrumentationProxy(instrumentation);
             field.set(currentActivityThread, instrumentationProxy);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            //throw new RouterException("routerAutoInject failure");
         }
     }
 

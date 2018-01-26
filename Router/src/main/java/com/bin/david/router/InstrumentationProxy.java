@@ -24,6 +24,7 @@ public class InstrumentationProxy extends Instrumentation {
     public Activity newActivity(ClassLoader cl, String className, Intent intent) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         Activity activity =  mInstrumentation.newActivity(cl, className, intent);
         SmartRouter.getInstance().inject(activity,intent);
+
         return activity;
     }
 
