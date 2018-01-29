@@ -1,6 +1,7 @@
 package com.bin.david.router;
 
 
+import com.bin.david.router.annotation.Interceptor;
 import com.bin.david.router.annotation.Param;
 import com.bin.david.router.annotation.Router;
 import com.bin.david.router.bean.RouterInfo;
@@ -9,6 +10,7 @@ import com.bin.david.router.core.RouterParser;
 import com.google.auto.service.AutoService;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,10 +50,12 @@ public class RouterProcessor extends AbstractProcessor {
         //获取到所有的Router注解
         Set<? extends Element> routerSet = roundEnv.getElementsAnnotatedWith(Router.class);
         Set<? extends Element> paramsSet = roundEnv.getElementsAnnotatedWith(Param.class);
+        Set<? extends Element> interceptorSet =roundEnv.getElementsAnnotatedWith(Interceptor.class);
         RouterParser routerParser = new RouterParser();
         Map<String,RouterInfo> routerMap =  routerParser.parse(routerSet,paramsSet);
+        List<String> interceptorList =routerParser.paramsInterceptor(interceptorSet);
         if(routerMap !=null &&routerMap.size()>0){
-            new RouterGenerater().generateCode(routerMap,filer);
+            new RouterGenerater().generateCode(routerMap,interceptorList,filer);
         }
         return true;
 
@@ -79,6 +83,8 @@ public class RouterProcessor extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new HashSet<>();
         set.add(Router.class.getCanonicalName());
+        set.add(Param.class.getCanonicalName());
+        set.add(Interceptor.class.getCanonicalName());
         return set;
     }
 }

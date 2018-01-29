@@ -1,5 +1,6 @@
 package com.bin.david.router.core;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,4 +11,7 @@ public interface IRouterLoad {
 
      Map onLoadRoute();
      Map onLoadParam();
+
+     List onLoadInterceptor();
+
 }

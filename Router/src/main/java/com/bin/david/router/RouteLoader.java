@@ -2,15 +2,19 @@ package com.bin.david.router;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.bin.david.router.bean.RouterInfo;
 import com.bin.david.router.bean.RouterParam;
 import com.bin.david.router.config.RouterConfig;
+import com.bin.david.router.core.InterceptorCallback;
+import com.bin.david.router.core.RouterInterceptor;
 import com.bin.david.router.exception.RouterException;
 import com.bin.david.router.core.IRouterLoad;
 
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,13 +24,45 @@ import java.util.Map;
 public class RouteLoader {
     private  Map<String,RouterInfo> rootRouterMap;
     private Map<String,RouterParam[]> routerParamMap;
+    private List<RouterInterceptor> interceptorList;
 
 
-    public Class getRouter(String url){
+    public void loadRouter(final String url, final Bundle extra){
+
         if(rootRouterMap !=null){
-            return rootRouterMap.get(url).getClazz();
+            RouterInfo routerInfo =  rootRouterMap.get(url);
+            if(routerInfo !=null){
+                if(interceptorList !=null&&interceptorList.size() >0) {
+                    for (RouterInterceptor interceptor : interceptorList) {
+                        interceptor.interceptor(routerInfo, new InterceptorCallback() {
+                            @Override
+                            public void interceptor(Exception e){
+
+                            }
+
+                            @Override
+                            public void onResume(RouterInfo routerInfo) {
+                               if(!routerInfo.getPath().equals(url)) {
+                                 loadRouter(routerInfo.getPath(),extra);
+                               }else{
+                                   startActitivty(routerInfo, extra);
+                               }
+
+                             }
+                        });
+                    }
+                }else{
+                    startActitivty(routerInfo,extra);
+                }
+            }
         }
-        return null;
+    }
+
+    private void startActitivty(RouterInfo routerInfo, final Bundle extra){
+        Intent intent = new Intent(SmartRouter.getInstance().getContext(),
+                routerInfo.getClazz());
+        intent.putExtras(extra);
+        SmartRouter.getInstance().getContext().startActivity(intent);
     }
 
     public void getParams(Context context,Intent intent){
@@ -61,6 +97,7 @@ public class RouteLoader {
             IRouterLoad load = create(RouterConfig.RouterRootLoadImp);
             rootRouterMap = load.onLoadRoute();
             routerParamMap = load.onLoadParam();
+            interceptorList = load.onLoadInterceptor();
         }
     }
 

@@ -6,12 +6,12 @@ import android.app.Instrumentation;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Parcelable;
 
 import com.bin.david.router.exception.RouterException;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
@@ -60,9 +60,11 @@ public class SmartRouter {
     }
 
     private void start(Builder builder){
-        Class clazz = mRouterLoader.getRouter(builder.url);
-        builder.intent.setClass(mContext,clazz);
-        mContext.startActivity(builder.intent);
+         mRouterLoader.loadRouter(builder.url,builder.extra);
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
     /**
@@ -95,11 +97,11 @@ public class SmartRouter {
 
     public static class Builder{
         private String url;
-        private Intent intent;
+        private Bundle extra;
 
         private Builder(String url) {
             this.url = url;
-            intent = new Intent();
+            extra = new Bundle();
         }
 
         public void navigation(){
@@ -107,31 +109,32 @@ public class SmartRouter {
         }
 
         public Builder withString(String key,String value){
-            intent.putExtra(key,value);
+            extra.putString(key,value);
+
             return this;
         }
 
         public Builder withInt(String key,int value){
-            intent.putExtra(key,value);
+            extra.putInt(key,value);
             return this;
         }
         public Builder withLong(String key,long value){
-            intent.putExtra(key,value);
+            extra.putLong(key,value);
             return this;
         }
 
         public Builder withShort(String key,short value){
-            intent.putExtra(key,value);
+            extra.putShort(key,value);
             return this;
         }
 
         public Builder widthParcelable(String key,Parcelable value){
-            intent.putExtra(key,value);
+            extra.putParcelable(key,value);
             return this;
         }
 
-        public Intent getExtra(){
-            return intent;
+        public Bundle getExtra(){
+            return extra;
         }
 
 

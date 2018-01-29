@@ -8,8 +8,8 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,12 +22,13 @@ import javax.lang.model.element.Modifier;
 
 public class RouterGenerater {
 
-    public void generateCode(Map<String,RouterInfo> routerInfoMap, Filer filer){
+    public void generateCode(Map<String,RouterInfo> routerInfoMap,List<String> interceptorArray, Filer filer){
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(RouterConfig.RouterRootLoadImp)
                 .addSuperinterface(IRouterLoad.class)
                 .addModifiers(Modifier.PUBLIC);
         typeBuilder.addMethod(generateRouteCode(routerInfoMap));
         typeBuilder.addMethod(generateParamsCode(routerInfoMap));
+        typeBuilder.addMethod(generateInterceptorCode(interceptorArray));
         JavaFile javaFile = JavaFile.builder(RouterConfig.RouterPackage, typeBuilder.build()).build();
         try {
             javaFile.writeTo(filer);
@@ -36,6 +37,8 @@ public class RouterGenerater {
             e.printStackTrace();
         }
     }
+
+
 
     private MethodSpec generateRouteCode(Map<String,RouterInfo> routerInfoMap){
 
@@ -54,6 +57,21 @@ public class RouterGenerater {
 
     }
 
+
+    private MethodSpec generateInterceptorCode(List<String> interceptorArray){
+
+        MethodSpec.Builder methodBuilder = MethodSpec
+                .methodBuilder("onLoadInterceptor")
+                .addModifiers(Modifier.PUBLIC)
+                .returns(List.class);
+        methodBuilder.addStatement("$T<$T> list = new $T<>()", List.class,RouterInterceptor.class, ArrayList.class);
+        for(String clazzName: interceptorArray){
+            methodBuilder.addStatement("list.add(new $N())",clazzName);
+        }
+        methodBuilder.addStatement("return list");
+        return methodBuilder.build();
+
+    }
 
     private MethodSpec generateParamsCode(Map<String,RouterInfo> routerInfoMap){
 
@@ -82,5 +100,7 @@ public class RouterGenerater {
         return methodBuilder.build();
 
     }
+
+
 
 }

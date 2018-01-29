@@ -4,16 +4,8 @@ import com.bin.david.router.annotation.Param;
 import com.bin.david.router.annotation.Router;
 import com.bin.david.router.bean.RouterInfo;
 import com.bin.david.router.bean.RouterParam;
-import com.bin.david.router.config.RouterConfig;
-import com.bin.david.router.core.IRouterLoad;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -92,7 +84,18 @@ public class RouterParser {
         return routerParamMap;
     }
 
-
-
+    public List<String> paramsInterceptor(Set<? extends Element> interceptorSet){
+        List<String> interceptorArray = new ArrayList<>();
+        for(Element e :interceptorSet){
+            if (e.getKind() != ElementKind.CLASS) {
+                // onError("Builder annotation can only be applied to method", e);
+                continue;
+            }
+            TypeElement element = (TypeElement) e;
+            String className = element.getQualifiedName().toString();
+            interceptorArray.add(className);
+        }
+        return interceptorArray;
+    }
 
 }

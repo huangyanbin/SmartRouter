@@ -8,6 +8,7 @@ import java.util.List;
 
 public class RouterInfo {
 
+
     private String name;
     private String path;
     private Class clazz;
