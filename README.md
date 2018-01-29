@@ -104,6 +104,9 @@
     }
 ```
 
+###### 第三天
+> 在网上看到这两张图，我采用的就是那种不稳定的做法，稳定我之前也想过，只是担心在编译之后会产生大量的类。![image](/img/instrumentation.png)![image](/img/new_activity_field.png)
+
 
 
 
